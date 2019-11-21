@@ -21,29 +21,51 @@ function initMcu() {
 
 }
 
+let localStreams = [];
+function addVideo() {
+  startMix();
+  let mediaConstraints={video:{ 
+    width: { min: 320, max: 320}, 
+  height: { min: 240, max: 240 },
+   frameRate:{min: 6, max: 7},
+  }
+}
+getDeviceStream(mediaConstraints)
+.then(function (stream) { // success
+  localStreams.push(stream);
+  mcu.addRemoteVideo(stream);
+  
+}).catch(function (error) { // error
+  console.error('getUserMedia error:', error);
+  return;
+});
+}
 
-//get video for each camera
-     navigator.mediaDevices.enumerateDevices()
-    .then(function (devices) {
-      let arrayLength = devices.length;
-      for (let i = 0; i < arrayLength; i++) {
-        let tempDevice = devices[i];
-        if (tempDevice.kind === 'videoinput' && !DEVICES.includes(tempDevice.deviceId)) {
-          DEVICES.push(tempDevice.deviceId);
-          let constraints = {video:{ 
-            width: { min: 320, max: 320}, 
-          height: { min: 240, max: 240 },
-           frameRate:{min: 6, max: 7}}
-        }
-          // {video: {deviceId: {exact: tempDevice.deviceId}}};
-            navigator.mediaDevices.getUserMedia(constraints)
-            .then(stream => {
-              startMix();
-              mcu.addRemoteVideo(stream);
-            })
-        }
-      }
-    })
+// function getMediaOptions() {
+//   let sizeString = cameraSizeSelect.options[cameraSizeSelect.selectedIndex].value;
+
+//   let options = { video: true, audio: true};
+//   if (sizeString === 'VGA') {
+//     options.video = { width: { min: 640, max: 640}, height: { min: 480, max: 480 } };
+//   }
+//   else if (sizeString === 'HD') {
+//     options.video = { width: { min: 1280, max: 1280}, height: { min: 720, max: 720 } };
+function getDeviceStream(option) {
+if ('getUserMedia' in navigator.mediaDevices) {
+  console.log('navigator.mediaDevices.getUserMadia');
+  return navigator.mediaDevices.getUserMedia(option);
+}
+else {
+  console.log('wrap navigator.getUserMadia with Promise');
+  return new Promise(function(resolve, reject){    
+    navigator.getUserMedia(option,
+      resolve,
+      reject
+    );
+  });      
+}
+}
+
 // mix video from all cameras into one stream
 function startMix(stream) {
   if (!mcu.isMixStarted()) {
