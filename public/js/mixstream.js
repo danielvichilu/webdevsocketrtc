@@ -23,7 +23,7 @@ function initMcu() {
 
 
 //get video for each camera
-    navigator.mediaDevices.enumerateDevices()
+     navigator.mediaDevices.enumerateDevices()
     .then(function (devices) {
       let arrayLength = devices.length;
       for (let i = 0; i < arrayLength; i++) {
@@ -33,8 +33,7 @@ function initMcu() {
           let constraints = {video:{ 
             width: { min: 320, max: 320}, 
           height: { min: 240, max: 240 },
-           frameRate:{min: 6, max: 7}
-      
+           frameRate:{min: 6, max: 7}}
         }
           // {video: {deviceId: {exact: tempDevice.deviceId}}};
             navigator.mediaDevices.getUserMedia(constraints)
@@ -45,7 +44,6 @@ function initMcu() {
         }
       }
     })
-
 // mix video from all cameras into one stream
 function startMix(stream) {
   if (!mcu.isMixStarted()) {
