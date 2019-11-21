@@ -34,7 +34,7 @@ function initMcu() {
             width: { min: 320, max: 320}, 
           height: { min: 240, max: 240 },
            frameRate:{min: 6, max: 7},
-           deviceId:{exact:tempDevice.deviceId}}
+          
         }
           // {video: {deviceId: {exact: tempDevice.deviceId}}};
             navigator.mediaDevices.getUserMedia(constraints)
