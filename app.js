@@ -1,31 +1,14 @@
-//
-// Browser MCU sample server
-//   https://github.com/mganeko/browser_mcu_server
-//   browser_mcu_server is provided under MIT license
-//
-//   This sample is using https://github.com/mganeko/browser_mcu_core
-//
-
-'use strict';
-
-
-
-const http = require("http");
-
 const express = require('express');
-
 const app = express();
-const webPort = process.env.PORT || 3000;
-app.use(express.static('public'));
 let broadcaster;
-var webServer=null;
-  // --- http ---
-  webServer = http.Server( app ).listen(webPort, function(){
-    console.log('Web server start. http://localhost:3000/server.html ');
-  });
+let server;
+let port;
+  const http = require('http');
+  server = http.createServer(app);
+  port = process.env.PORT || 3000;
 
-
-const io = require('socket.io')(webServer)
+const io = require('socket.io')(server);
+app.use(express.static(__dirname + '/public'));
 io.sockets.on('error', e => console.log(e));
 io.sockets.on('connection', function (socket) {
   socket.on('broadcaster', function () {
@@ -48,3 +31,5 @@ io.sockets.on('connection', function (socket) {
     broadcaster && socket.to(broadcaster).emit('bye', socket.id);
   });
 });
+server.listen(port, () => console.log(`http://localhost:${port}`+ '/mix.html',))
+                          console.log(`http://localhost:${port}`+ '/index.html',);
