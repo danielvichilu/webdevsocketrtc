@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,13 +6,19 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<meta name="description" content="WebRTC Video Broadcast.">
 	<meta name="author" content="Brian Mau">
-	<link href="./css/main.css" rel="stylesheet">
+	
 </head>
 <body>
-<video controls playsinline autoplay muted></video>
+	<img id="image">
+	aaaaa
+
 <script src="/socket.io/socket.io.js"></script>
-<script src="./js/index.js"></script>
-<script src="./js/watch.js"></script>
-<script src="./js/browser_mcu_core.js"></script>
+<script>
+	const socket = io.connect(window.location.origin);
+	socket.on('data', (data) => {
+		const imageElm=document.getElementById('image');
+		imageElm.src=`data:image/jpeg;base64,${data}`
+		});
+	</script>
 </body>
 </html>
