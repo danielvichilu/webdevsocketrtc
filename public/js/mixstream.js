@@ -74,7 +74,6 @@ function startMix(stream) {
     mixVideo.play();  
     mixVideo.volume = 0;
     socket.emit('broadcaster');
-    setTimeout(function(){ socket.close() }, 15000);
     socket.on('disconnect', () => {
       socket.open();
       socket.emit('broadcaster');
